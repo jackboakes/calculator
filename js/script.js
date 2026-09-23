@@ -50,6 +50,9 @@ function clearCalculatorState() {
 
 const clearButton = document.querySelector("#clear");
 clearButton.addEventListener("click", clearCalculatorState);
+clearButton.addEventListener("mousedown", () => {
+    clearButton.style.backgroundColor = "#df2752";
+});
 
 const deleteButton = document.querySelector("#delete");
 deleteButton.addEventListener("click", () => {
@@ -61,7 +64,10 @@ deleteButton.addEventListener("click", () => {
     }
     display = display.slice(0, length - 1);
     displayText.textContent = display;
-})
+});
+deleteButton.addEventListener("mousedown", () => {
+    deleteButton.style.backgroundColor = "#df2752";
+});
 
 const numberButtons = document.querySelectorAll(".number");
 numberButtons.forEach((button) => {
@@ -108,6 +114,10 @@ numberButtons.forEach((button) => {
         }
         displayText.textContent = display;
     });
+
+    button.addEventListener("mousedown", () => {
+        button.style.backgroundColor = "#021b24";
+    });
 });
 
 const operatorButtons = document.querySelectorAll(".operator");
@@ -129,6 +139,10 @@ operatorButtons.forEach((button) => {
                 operator = divide;
                 break;
         }
+    });
+
+    button.addEventListener("mousedown", () => {
+        button.style.backgroundColor = "#021b24";
     });
 });
 
@@ -163,4 +177,12 @@ equalsButton.addEventListener("click", () => {
     operator = undefined;
     CALC_STATE = ENTERED_EQUALS;
 });
+equalsButton.addEventListener("mousedown", () => {
+    equalsButton.style.backgroundColor = "#0b8d6a";
+});
 
+// NOTE:: Maybe footgun to remove all styles
+const allButtons = document.querySelectorAll("button");
+document.addEventListener("mouseup", () => {
+    allButtons.forEach(button => button.removeAttribute("style"));
+});

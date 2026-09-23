@@ -8,15 +8,17 @@ body {
     margin: 0 auto;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
+    display: flex;
+    justify-content: center;
 }
 
 .calculator-container {
     width: 373px;
-    margin: 20px;
     font-size: 20px;
     background-color: #072630;
     border-radius: 3px;
     border: solid 1px black;
+    margin-top: 40px;
 }
 
 .display-text {
@@ -36,7 +38,7 @@ body {
     border-bottom-right-radius: 3px;
 }
 
-.button-container button {
+button {
     height: 45px;
     width: 65px;
     font-weight: bold;
@@ -45,6 +47,13 @@ body {
     border: solid 1px black;
     border-radius: 3px;
     background-color: #073b4c;
+    user-select: none;
+}
+
+
+
+button:hover {
+    background-color: #15617a;
 }
 
 #delete,
@@ -53,9 +62,18 @@ body {
     border: 0;
 }
 
+#delete:hover,
+#clear:hover {
+    background-color: #f77492;
+} 
+
 #equals {
     background-color: #06d6a0;
     border: 0;
+}
+
+#equals:hover {
+    background-color: #35ffc9;
 }
 
 .button-spacer {
