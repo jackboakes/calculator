@@ -62,7 +62,7 @@ deleteButton.addEventListener("click", () => {
     else if(displayText.textContent === operandB) {
         operandB = operandB.slice(0, length - 1);
     }
-    display = display.slice(0, length - 1);
+    display = display.toString().slice(0, length - 1);
     displayText.textContent = display;
 });
 deleteButton.addEventListener("mousedown", () => {
