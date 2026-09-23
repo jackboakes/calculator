@@ -49,7 +49,7 @@ function clearCalculatorState() {
 }
 
 const clearButton = document.querySelector("#clear");
-clearButton.addEventListener("click", clearCalculatorState());
+clearButton.addEventListener("click", clearCalculatorState);
 
 const deleteButton = document.querySelector("#delete");
 deleteButton.addEventListener("click", () => {
@@ -102,7 +102,7 @@ const operatorButtons = document.querySelectorAll(".operator");
 operatorButtons.forEach((button) => {
     button.addEventListener("click", () => {
         CALC_STATE = ENTERED_OPERATOR;
-        
+
         switch(button.textContent) {
             case OPERATOR_ADD:
                 operator = add;
@@ -120,10 +120,30 @@ operatorButtons.forEach((button) => {
     });
 });
 
+const dotButton = document.querySelector("#dot");
+dotButton.addEventListener("click", () => {
+    
+});
+
 const equalsButton = document.querySelector("#equals");
 equalsButton.addEventListener("click", () => {
-    const a = parseInt(operandA); 
-    const b = parseInt(operandB)
+    let a;
+    let b;
+    if(Number.isInteger(operandA)) {
+        a = parseInt(operandA);
+    }
+    else {
+        a = parseFloat(operandA)
+    }
+
+    if(Number.isInteger(operandB)) {
+        b = parseInt(operandB);
+    }
+    else {
+        b = parseFloat(operandB);
+    }
+
+    const 
     display = operate(operator, a, b);
     displayText.textContent = display;
     operandA = display;
