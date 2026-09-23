@@ -57,12 +57,12 @@ clearButton.addEventListener("mousedown", () => {
 const deleteButton = document.querySelector("#delete");
 deleteButton.addEventListener("click", () => {
     if(displayText.textContent === operandA) {
-        operandA = operandA.slice(0, length - 1);
+        operandA = operandA.slice(0, - 1);
     }
     else if(displayText.textContent === operandB) {
-        operandB = operandB.slice(0, length - 1);
+        operandB = operandB.slice(0, - 1);
     }
-    display = display.toString().slice(0, length - 1);
+    display = display.toString().slice(0, - 1);
     displayText.textContent = display;
 });
 deleteButton.addEventListener("mousedown", () => {
@@ -148,6 +148,10 @@ operatorButtons.forEach((button) => {
 
 const equalsButton = document.querySelector("#equals");
 equalsButton.addEventListener("click", () => {
+    if(operator === undefined || operandA === "") {
+        return;
+    }
+
     let a;
     let b;
     if(Number.isInteger(operandA)) {
@@ -164,7 +168,7 @@ equalsButton.addEventListener("click", () => {
         b = parseFloat(operandB);
     }
 
-    if(b === undefined) {
+    if(operandB === "") {
         display = a;
     }
     else {
