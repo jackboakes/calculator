@@ -168,7 +168,7 @@ equalsButton.addEventListener("click", () => {
         b = parseFloat(operandB);
     }
 
-    if(operandB === "") {
+    if(Number.isNaN(b)) {
         display = a;
     }
     else {
