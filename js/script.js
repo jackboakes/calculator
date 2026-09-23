@@ -40,7 +40,7 @@ function operate(operator, a, b) {
 }
 
 function clearCalculatorState() {
-    CALC_STATE === ENTERING_OPERAND_A;
+    CALC_STATE = ENTERING_OPERAND_A;
     displayText.textContent = "";
     display = "";
     operandA = "";
@@ -79,6 +79,12 @@ numberButtons.forEach((button) => {
                 CALC_STATE = ENTERING_OPERAND_A;
                 break;
             case ENTERING_OPERAND_A:
+                if(button.id === "dot") {
+                    const hasDot = operandA.split('').includes(".");
+                    if(hasDot) {
+                        return;
+                    }
+                }
                 if(operandA.length < MAX_DISPLAY_LENGTH) {
                     operandA += button.textContent;
                     display = operandA;
@@ -87,6 +93,12 @@ numberButtons.forEach((button) => {
             case ENTERED_OPERATOR:
                 CALC_STATE = ENTERING_OPERAND_B;
             case ENTERING_OPERAND_B:
+                if(button.id === "dot") {
+                    const hasDot = operandB.split('').includes(".");
+                    if(hasDot) {
+                        return;
+                    }
+                }
                 if(operandB.length < MAX_DISPLAY_LENGTH) {
                     operandB += button.textContent;
                     display = operandB;
@@ -120,11 +132,6 @@ operatorButtons.forEach((button) => {
     });
 });
 
-const dotButton = document.querySelector("#dot");
-dotButton.addEventListener("click", () => {
-    
-});
-
 const equalsButton = document.querySelector("#equals");
 equalsButton.addEventListener("click", () => {
     let a;
@@ -143,10 +150,15 @@ equalsButton.addEventListener("click", () => {
         b = parseFloat(operandB);
     }
 
-    const 
-    display = operate(operator, a, b);
+    if(b === undefined) {
+        display = a;
+    }
+    else {
+        display = operate(operator, a, b);
+    }
+
     displayText.textContent = display;
-    operandA = display;
+    operandA = display.toString();
     operandB = "";
     operator = undefined;
     CALC_STATE = ENTERED_EQUALS;
