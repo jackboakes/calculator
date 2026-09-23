@@ -1,4 +1,4 @@
-let operator;
+let operator = undefined;
 let operandA = "";
 let operandB = "";
 
@@ -32,6 +32,9 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
+    if(b === 0) {
+        return "Error! Can't divide by 0";
+    }
     return a / b;
 }
 
@@ -56,6 +59,7 @@ clearButton.addEventListener("mousedown", () => {
 
 const deleteButton = document.querySelector("#delete");
 deleteButton.addEventListener("click", () => {
+    // TODO:: bug if operandA === operandB
     if(displayText.textContent === operandA) {
         operandA = operandA.slice(0, - 1);
     }
@@ -125,6 +129,17 @@ operatorButtons.forEach((button) => {
     button.addEventListener("click", () => {
         CALC_STATE = ENTERED_OPERATOR;
 
+        const aEmpty = operandA === "";
+        const bEmpty = operandB === "";
+        if (!aEmpty && !bEmpty) {
+            display = operate(operator, Number(operandA), Number(operandB));
+    
+            displayText.textContent = display;
+            operandA = display;
+            operandB = "";
+            operator = undefined;
+        }
+
         switch(button.textContent) {
             case OPERATOR_ADD:
                 operator = add;
@@ -148,35 +163,28 @@ operatorButtons.forEach((button) => {
 
 const equalsButton = document.querySelector("#equals");
 equalsButton.addEventListener("click", () => {
-    if(operator === undefined || operandA === "") {
+    if(operator === undefined) {
         return;
     }
 
-    let a;
-    let b;
-    if(Number.isInteger(operandA)) {
-        a = parseInt(operandA);
-    }
-    else {
-        a = parseFloat(operandA)
-    }
+    const aEmpty = operandA === "";
+    const bEmpty = operandB === "";
 
-    if(Number.isInteger(operandB)) {
-        b = parseInt(operandB);
+    if (aEmpty && bEmpty) {
+        return;
+    }
+    else if (aEmpty) {
+        display = Number(operandB);
+    }
+    else if (bEmpty) {
+        display = Number(operandA);
     }
     else {
-        b = parseFloat(operandB);
-    }
-
-    if(Number.isNaN(b)) {
-        display = a;
-    }
-    else {
-        display = operate(operator, a, b);
+        display = operate(operator, Number(operandA), Number(operandB));
     }
 
     displayText.textContent = display;
-    operandA = display.toString();
+    operandA = display;
     operandB = "";
     operator = undefined;
     CALC_STATE = ENTERED_EQUALS;
@@ -185,7 +193,6 @@ equalsButton.addEventListener("mousedown", () => {
     equalsButton.style.backgroundColor = "#0b8d6a";
 });
 
-// NOTE:: Maybe footgun to remove all styles
 const allButtons = document.querySelectorAll("button");
 document.addEventListener("mouseup", () => {
     allButtons.forEach(button => button.removeAttribute("style"));
