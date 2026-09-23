@@ -133,7 +133,6 @@ operatorButtons.forEach((button) => {
         const bEmpty = operandB === "";
         if (!aEmpty && !bEmpty) {
             display = operate(operator, Number(operandA), Number(operandB));
-    
             displayText.textContent = display;
             operandA = display;
             operandB = "";
@@ -169,7 +168,6 @@ equalsButton.addEventListener("click", () => {
 
     const aEmpty = operandA === "";
     const bEmpty = operandB === "";
-
     if (aEmpty && bEmpty) {
         return;
     }
@@ -180,7 +178,15 @@ equalsButton.addEventListener("click", () => {
         display = Number(operandA);
     }
     else {
-        display = operate(operator, Number(operandA), Number(operandB));
+        if(isNaN(Number(operandA))) {
+            display = Number(operandB);
+        }
+        else if(isNaN(Number(operandB))) {
+            display = Number(operandA);
+        }
+        else {
+            display = operate(operator, Number(operandA), Number(operandB));
+        }
     }
 
     displayText.textContent = display;
