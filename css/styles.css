@@ -50,8 +50,6 @@ button {
     user-select: none;
 }
 
-
-
 button:hover {
     background-color: #15617a;
 }
@@ -70,13 +68,9 @@ button:hover {
 #equals {
     background-color: #06d6a0;
     border: 0;
-}
+    margin-left: 140px;
+}p
 
 #equals:hover {
     background-color: #35ffc9;
-}
-
-.button-spacer {
-    height: 45px;
-    width: 65px;
 }
