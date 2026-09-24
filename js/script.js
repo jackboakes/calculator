@@ -42,7 +42,7 @@ function operate(operator, a, b) {
     return operator(a, b);
 }
 
-function clearCalculatorState() {
+function applyClear() {
     CALC_STATE = ENTERING_OPERAND_A;
     displayText.textContent = "";
     display = "";
@@ -52,27 +52,24 @@ function clearCalculatorState() {
 }
 
 const clearButton = document.querySelector("#clear");
-clearButton.addEventListener("click", clearCalculatorState);
+clearButton.addEventListener("click", applyClear);
 clearButton.addEventListener("mousedown", () => {
     clearButton.style.backgroundColor = "#df2752";
 });
 
 function applyDelete() {
-    // TODO:: bug if operandA === operandB
-    if(displayText.textContent === operandA) {
-        operandA = operandA.slice(0, - 1);
-    }
-    else if(displayText.textContent === operandB) {
+    if(displayText.textContent === operandB) {
         operandB = operandB.slice(0, - 1);
+    }
+    else if(displayText.textContent === operandA) {
+        operandA = operandA.slice(0, - 1);
     }
     display = display.toString().slice(0, - 1);
     displayText.textContent = display;
 }
 
 const deleteButton = document.querySelector("#delete");
-deleteButton.addEventListener("click", () => {
-    applyDelete();
-});
+deleteButton.addEventListener("click", applyDelete);
 deleteButton.addEventListener("mousedown", () => {
     deleteButton.style.backgroundColor = "#df2752";
 });
@@ -131,44 +128,44 @@ numberButtons.forEach((button) => {
     });
 });
 
+function applyOperator(op) {
+    CALC_STATE = ENTERED_OPERATOR;
+
+    const aEmpty = operandA === "";
+    const bEmpty = operandB === "";
+    if (!aEmpty && !bEmpty) {
+        display = operate(operator, Number(operandA), Number(operandB));
+        displayText.textContent = display;
+        operandA = display;
+        operandB = "";
+        operator = undefined;
+    }
+
+    switch(op) {
+        case OPERATOR_ADD:
+            operator = add;
+            break;
+        case OPERATOR_SUBTRACT:
+            operator = subtract;
+            break;
+        case OPERATOR_MULTIPLY:
+            operator = multiply;
+            break;
+        case OPERATOR_DIVIDE:
+            operator = divide;
+            break;
+    }
+}
+
 const operatorButtons = document.querySelectorAll(".operator");
 operatorButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-        CALC_STATE = ENTERED_OPERATOR;
-
-        const aEmpty = operandA === "";
-        const bEmpty = operandB === "";
-        if (!aEmpty && !bEmpty) {
-            display = operate(operator, Number(operandA), Number(operandB));
-            displayText.textContent = display;
-            operandA = display;
-            operandB = "";
-            operator = undefined;
-        }
-
-        switch(button.textContent) {
-            case OPERATOR_ADD:
-                operator = add;
-                break;
-            case OPERATOR_SUBTRACT:
-                operator = subtract;
-                break;
-            case OPERATOR_MULTIPLY:
-                operator = multiply;
-                break;
-            case OPERATOR_DIVIDE:
-                operator = divide;
-                break;
-        }
-    });
-
+    button.addEventListener("click", () => applyOperator(button.textContent));
     button.addEventListener("mousedown", () => {
         button.style.backgroundColor = "#021b24";
     });
 });
 
-const equalsButton = document.querySelector("#equals");
-equalsButton.addEventListener("click", () => {
+function applyEquals() {
     if(operator === undefined) {
         return;
     }
@@ -201,7 +198,9 @@ equalsButton.addEventListener("click", () => {
     operandB = "";
     operator = undefined;
     CALC_STATE = ENTERED_EQUALS;
-});
+}
+const equalsButton = document.querySelector("#equals");
+equalsButton.addEventListener("click", applyEquals);
 equalsButton.addEventListener("mousedown", () => {
     equalsButton.style.backgroundColor = "#0b8d6a";
 });
@@ -213,6 +212,9 @@ document.addEventListener("mouseup", () => {
 
 window.addEventListener("keydown", (event) => {
     switch(event.key) {
+        case "Escape":
+            applyClear();
+            break;
         case "Backspace":
         case "Delete":
             applyDelete();
@@ -249,6 +251,22 @@ window.addEventListener("keydown", (event) => {
             break;
         case ".":
             applyNumber(".");
+            break;
+        case "=":
+            applyEquals("=");
+            break;
+        case "+":
+            applyOperator(OPERATOR_ADD);
+            break;
+        case "-":
+            applyOperator(OPERATOR_SUBTRACT);
+            break;
+        case "*":
+        case "x":
+            applyOperator(OPERATOR_MULTIPLY);
+            break;
+        case "/":
+            applyOperator(OPERATOR_DIVIDE);
             break;
     }
 });
