@@ -253,6 +253,7 @@ window.addEventListener("keydown", (event) => {
             applyNumber(".");
             break;
         case "=":
+        case "Enter":
             applyEquals("=");
             break;
         case "+":
