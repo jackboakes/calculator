@@ -57,8 +57,7 @@ clearButton.addEventListener("mousedown", () => {
     clearButton.style.backgroundColor = "#df2752";
 });
 
-const deleteButton = document.querySelector("#delete");
-deleteButton.addEventListener("click", () => {
+function applyDelete() {
     // TODO:: bug if operandA === operandB
     if(displayText.textContent === operandA) {
         operandA = operandA.slice(0, - 1);
@@ -68,57 +67,65 @@ deleteButton.addEventListener("click", () => {
     }
     display = display.toString().slice(0, - 1);
     displayText.textContent = display;
+}
+
+const deleteButton = document.querySelector("#delete");
+deleteButton.addEventListener("click", () => {
+    applyDelete();
 });
 deleteButton.addEventListener("mousedown", () => {
     deleteButton.style.backgroundColor = "#df2752";
 });
 
+function applyNumber(number) {
+switch(CALC_STATE){
+    case ENTERED_EQUALS:
+        operandA = "";
+        operandA = "";
+        operandB = "";
+        operator = undefined;
+        if(operandA.length < MAX_DISPLAY_LENGTH) {
+            operandA += number;
+            display = operandA;
+        }
+        CALC_STATE = ENTERING_OPERAND_A;
+        break;
+    case ENTERING_OPERAND_A:
+        if(number === ".") {
+            const hasDot = operandA.split('').includes(".");
+            if(hasDot) {
+                return;
+            }
+        }
+        if(operandA.length < MAX_DISPLAY_LENGTH) {
+            operandA += number;
+            display = operandA;
+        }
+        break;
+    case ENTERED_OPERATOR:
+        CALC_STATE = ENTERING_OPERAND_B;
+    case ENTERING_OPERAND_B:
+        if(number === ".") {
+            const hasDot = operandB.split('').includes(".");
+            if(hasDot) {
+                return;
+            }
+        }
+        if(operandB.length < MAX_DISPLAY_LENGTH) {
+            operandB += number;
+            display = operandB;
+        }
+        
+        break;
+    }
+    displayText.textContent = display;
+}
+
 const numberButtons = document.querySelectorAll(".number");
 numberButtons.forEach((button) => {
     button.addEventListener("click", () => {
-        switch(CALC_STATE){
-            case ENTERED_EQUALS:
-                operandA = "";
-                operandA = "";
-                operandB = "";
-                operator = undefined;
-                if(operandA.length < MAX_DISPLAY_LENGTH) {
-                    operandA += button.textContent;
-                    display = operandA;
-                }
-                CALC_STATE = ENTERING_OPERAND_A;
-                break;
-            case ENTERING_OPERAND_A:
-                if(button.id === "dot") {
-                    const hasDot = operandA.split('').includes(".");
-                    if(hasDot) {
-                        return;
-                    }
-                }
-                if(operandA.length < MAX_DISPLAY_LENGTH) {
-                    operandA += button.textContent;
-                    display = operandA;
-                }
-                break;
-            case ENTERED_OPERATOR:
-                CALC_STATE = ENTERING_OPERAND_B;
-            case ENTERING_OPERAND_B:
-                if(button.id === "dot") {
-                    const hasDot = operandB.split('').includes(".");
-                    if(hasDot) {
-                        return;
-                    }
-                }
-                if(operandB.length < MAX_DISPLAY_LENGTH) {
-                    operandB += button.textContent;
-                    display = operandB;
-                }
-                
-                break;
-        }
-        displayText.textContent = display;
+        applyNumber(button.textContent);
     });
-
     button.addEventListener("mousedown", () => {
         button.style.backgroundColor = "#021b24";
     });
@@ -202,4 +209,46 @@ equalsButton.addEventListener("mousedown", () => {
 const allButtons = document.querySelectorAll("button");
 document.addEventListener("mouseup", () => {
     allButtons.forEach(button => button.removeAttribute("style"));
+});
+
+window.addEventListener("keydown", (event) => {
+    switch(event.key) {
+        case "Backspace":
+        case "Delete":
+            applyDelete();
+            break;
+        case "1":
+            applyNumber(1);
+            break;
+        case "2":
+            applyNumber(2);
+            break;
+        case "3":
+            applyNumber(3);
+            break;
+        case "4":
+            applyNumber(4);
+            break;
+        case "5":
+            applyNumber(5);
+            break;
+        case "6":
+            applyNumber(6);
+            break;
+        case "7":
+            applyNumber(7);
+            break;
+        case "8":
+            applyNumber(8);
+            break;
+        case "9":
+            applyNumber(9);
+            break;
+        case "0":
+            applyNumber(0);
+            break;
+        case ".":
+            applyNumber(".");
+            break;
+    }
 });
